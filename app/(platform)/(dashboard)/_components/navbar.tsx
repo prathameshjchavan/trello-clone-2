@@ -12,6 +12,7 @@ const Navbar = () => {
           <Logo />
         </div>
         <Button
+          variant="primary"
           size="sm"
           className="hidden h-auto rounded-sm px-2 py-1.5 md:block"
         >
