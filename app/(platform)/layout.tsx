@@ -7,7 +7,7 @@ interface PlatformLayoutProps {
 
 const PlatformLayout = ({ children }: PlatformLayoutProps) => {
   return (
-    <div>
+    <div className="h-full">
       <ClerkProvider>{children}</ClerkProvider>
     </div>
   );
