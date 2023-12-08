@@ -1,6 +1,6 @@
-import { create } from "@/actions/create-board";
-import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
+import Board from "./_components/board";
+import Form from "./_components/form";
 
 interface OrganizationPageProps {
   params: {
@@ -13,20 +13,10 @@ const OrganizationPage = async ({ params }: OrganizationPageProps) => {
 
   return (
     <div className="flex flex-col space-y-4">
-      <form action={create}>
-        <input
-          id="title"
-          name="title"
-          type="text"
-          placeholder="Enter a board title"
-          className="border border-black p-1"
-          required
-        />
-        <Button type="submit">Submit</Button>
-      </form>
+      <Form />
       <div className="space-y-2">
         {boards.map((board) => (
-          <div key={board.id}>{board.title}</div>
+          <Board key={board.id} board={board} />
         ))}
       </div>
     </div>
