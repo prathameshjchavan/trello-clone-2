@@ -12,6 +12,7 @@ import FormInput from "./form-input";
 import FormSubmit from "./form-submit";
 import { useAction } from "@/hooks/use-action";
 import { createBoard } from "@/actions/create-board";
+import { useRef } from "react";
 
 interface FormPopoverProps {
   children: React.ReactNode;
@@ -26,6 +27,7 @@ const FormPopover = ({
   align,
   sideOffset = 0,
 }: FormPopoverProps) => {
+  const formRef = useRef<HTMLFormElement>(null);
   const { execute, fieldErrors } = useAction(createBoard, {
     onSuccess: (data) => {
       console.log({ data });
@@ -35,10 +37,12 @@ const FormPopover = ({
     },
   });
 
-  const onSubmit = (formData: FormData) => {
+  const onSubmit = async (formData: FormData) => {
     const title = formData.get("title") as string;
 
-    execute({ title });
+    await execute({ title });
+
+    formRef.current?.reset();
   };
 
   return (
@@ -61,7 +65,7 @@ const FormPopover = ({
             <X className="h-4 w-4" />
           </Button>
         </PopoverClose>
-        <form action={onSubmit} className="space-y-4">
+        <form ref={formRef} action={onSubmit} className="space-y-4">
           <div className="space-y-4">
             <FormInput
               id="title"
