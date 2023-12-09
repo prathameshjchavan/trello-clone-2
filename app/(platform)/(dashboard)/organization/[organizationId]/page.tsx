@@ -1,11 +1,17 @@
-interface OrganizationPageProps {
+import Info from "./_components/info";
+
+interface OrganizationIdPageProps {
   params: {
     organizationId: string;
   };
 }
 
-const OrganizationPage = async ({ params }: OrganizationPageProps) => {
-  return <div className="flex flex-col space-y-4"></div>;
+const OrganizationIdPage = async ({ params }: OrganizationIdPageProps) => {
+  return (
+    <div className="mb-20 w-full">
+      <Info />
+    </div>
+  );
 };
 
-export default OrganizationPage;
+export default OrganizationIdPage;
