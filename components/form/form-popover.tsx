@@ -43,8 +43,11 @@ const FormPopover = ({
 
   const onSubmit = async (formData: FormData) => {
     const title = formData.get("title") as string;
+    const image = formData.get("image") as string;
 
-    await execute({ title });
+    console.log({image})
+
+    // await execute({ title });
 
     formRef.current?.reset();
   };
