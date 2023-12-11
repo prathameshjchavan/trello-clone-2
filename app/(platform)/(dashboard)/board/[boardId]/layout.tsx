@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
+import BoardNavbar from "./_components/board-navbar";
 
 interface BoardIdLayoutProps {
   children: React.ReactNode;
@@ -52,6 +53,8 @@ const BoardIdLayout = async ({ children, params }: BoardIdLayoutProps) => {
       className="relative h-full bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${board.imageFullUrl})` }}
     >
+      <BoardNavbar data={board} />
+      <div className="absolute inset-0 bg-black/10" />
       <main className="relative h-full pt-28">{children}</main>
     </div>
   );
