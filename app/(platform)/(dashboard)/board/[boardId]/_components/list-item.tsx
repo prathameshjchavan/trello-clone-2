@@ -12,7 +12,7 @@ interface ListItemProps {
 const ListItem = ({ data, index }: ListItemProps) => {
   return <div className="h-full w-[272px] shrink-0 select-none">
     <div className="w-full rounded-md shadow-md pb-2 bg-[#F1F2F4]">
-        <ListHeader />
+        <ListHeader data={data} />
     </div>
   </div>;
 };
