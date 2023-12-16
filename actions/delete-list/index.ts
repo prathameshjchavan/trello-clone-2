@@ -37,4 +37,4 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   return {data: list}
 };
 
-export const deleteBoard = createSafeAction(DeleteList, handler);
+export const deleteList = createSafeAction(DeleteList, handler);
