@@ -44,6 +44,49 @@ const ListContainer = ({ boardId, data }: ListContainerProps) => {
       setOrderedData(items);
       // TODO: Trigger Server Action
     }
+
+    // user moves a card
+    if (type === "card") {
+      let newOrderedData = structuredClone(orderedData);
+
+      // Source and destination list
+      const sourceList = newOrderedData.find(
+        (list) => list.id === source.droppableId,
+      );
+      const destinationList = newOrderedData.find(
+        (list) => list.id === destination.droppableId,
+      );
+
+      if (!sourceList || !destinationList) return;
+
+      // Check if cards exists on the sourceList
+      if (!sourceList.cards) {
+        sourceList.cards = [];
+      }
+
+      // Check if cards exists on the destinationList
+      if (!destinationList.cards) {
+        destinationList.cards = [];
+      }
+
+      // Moving the card in the same list
+      if (source.droppableId === destination.droppableId) {
+        const reorderedCards = reorder(
+          sourceList.cards,
+          source.index,
+          destination.index,
+        );
+
+        reorderedCards.forEach((card, index) => {
+          card.order = index + 1;
+        });
+
+        sourceList.cards = reorderedCards;
+
+        setOrderedData(newOrderedData);
+        // TODO: Trigger Server Action
+      }
+    }
   };
 
   useEffect(() => {
