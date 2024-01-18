@@ -23,12 +23,35 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 const ListContainer = ({ boardId, data }: ListContainerProps) => {
   const [orderedData, setOrderedData] = useState(data);
 
+  const onDragEnd = (result: any) => {
+    const { destination, source, type } = result;
+
+    if (!destination) return;
+
+    // if dropped in the same position
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return;
+
+    // user moves a list
+    if (type === "list") {
+      const items = reorder(orderedData, source.index, destination.index).map(
+        (item, index) => ({ ...item, order: index + 1 }),
+      );
+
+      setOrderedData(items);
+      // TODO: Trigger Server Action
+    }
+  };
+
   useEffect(() => {
     setOrderedData(data);
   }, [data]);
 
   return (
-    <DragDropContext onDragEnd={() => {}}>
+    <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="list" type="list" direction="horizontal">
         {(provided) => (
           <ol
