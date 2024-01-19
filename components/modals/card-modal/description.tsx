@@ -5,12 +5,15 @@ import { ElementRef, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useEventListener, useOnClickOutside } from "usehooks-ts";
+import { toast } from "sonner";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { CardWithList } from "@/typings";
 import FormTextarea from "@/components/form/form-textarea";
 import FormSubmit from "@/components/form/form-submit";
 import { Button } from "@/components/ui/button";
+import { useAction } from "@/hooks/use-action";
+import { updateCard } from "@/actions/update-card";
 
 interface DescriptionProps {
   data: CardWithList;
@@ -22,6 +25,18 @@ const Description = ({ data }: DescriptionProps) => {
   const textareaRef = useRef<ElementRef<"textarea">>(null);
   const queryClient = useQueryClient();
   const params = useParams();
+  const { execute, fieldErrors } = useAction(updateCard, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ["card", data.id],
+      });
+      toast.success(`Card "${data.title}" updated`);
+      disableEditing()
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
 
   const enableEditing = () => {
     setIsEditing(true);
@@ -44,7 +59,7 @@ const Description = ({ data }: DescriptionProps) => {
     const description = formData.get("description") as string;
     const boardId = params.boardId as string;
 
-    // TODO: Execute
+    execute({ description, boardId, id: data.id });
   };
 
   useEventListener("keydown", onKeyDown);
@@ -56,17 +71,17 @@ const Description = ({ data }: DescriptionProps) => {
       <div className="w-full">
         <p className="mb-2 font-semibold text-neutral-700">Description</p>
         {isEditing ? (
-          <form ref={formRef} className="space-y-2">
+          <form action={onSubmit} ref={formRef} className="space-y-2">
             <FormTextarea
+              ref={textareaRef}
               id="description"
+              errors={fieldErrors}
               className="mt-2 w-full"
               placeholder="Add a more detailed description"
               defaultValue={data.description || undefined}
             />
             <div className="flex items-center gap-x-2">
-              <FormSubmit>
-                Save
-              </FormSubmit>
+              <FormSubmit>Save</FormSubmit>
               <Button
                 type="button"
                 onClick={disableEditing}
