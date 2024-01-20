@@ -10,6 +10,7 @@ import { db } from "@/lib/db";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { DeleteBoard } from "./schema";
 import createAuditLog from "@/lib/create-audit-log";
+import { decrementAvailableCount } from "@/lib/org-limit";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -31,12 +32,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       },
     });
 
+    await decrementAvailableCount()
+
     await createAuditLog({
       entityTitle: board.title,
       entityId: board.id,
       entityType: ENTITY_TYPE.BOARD,
-      action: ACTION.DELETE
-    })
+      action: ACTION.DELETE,
+    });
   } catch (error) {
     return {
       error: "Failed to delete.",
