@@ -9,6 +9,7 @@ import { db } from "./../../lib/db";
 import { InputType, ReturnType } from "./types";
 import { CreateBoard } from "./schema";
 import createAuditLog from "@/lib/create-audit-log";
+import { incrementAvailableCount, hasAvailableCount } from "@/lib/org-limit";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -16,6 +17,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   if (!userId || !orgId) {
     return { error: "Unauthorized" };
   }
+
+  const canCreate = await hasAvailableCount();
+
+  if (!canCreate)
+    return {
+      error:
+        "You have reached your limit of free boards. Please upgrade to create more",
+    };
 
   const { title, image } = data;
   const [imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] =
@@ -47,12 +56,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       },
     });
 
+    await incrementAvailableCount()
+
     await createAuditLog({
       entityTitle: board.title,
       entityId: board.id,
       entityType: ENTITY_TYPE.BOARD,
-      action: ACTION.CREATE
-    })
+      action: ACTION.CREATE,
+    });
   } catch (error) {
     return {
       error: "Failed to create",
