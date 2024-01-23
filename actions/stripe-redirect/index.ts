@@ -63,8 +63,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
           },
         ],
         metadata: {
-          orgId,
-        },
+          orgId: `${orgId}`,
+        }
       });
 
       url = stripeSession.url || "";
