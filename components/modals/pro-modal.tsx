@@ -1,13 +1,29 @@
 "use client";
 
 import Image from "next/image";
+import { toast } from "sonner";
 
 import { useProModal } from "@/hooks/use-pro-modal";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { Button } from "../ui/button";
+import { useAction } from "@/hooks/use-action";
+import { stripeRedirect } from "@/actions/stripe-redirect";
 
 const ProModal = () => {
   const proModal = useProModal();
+
+  const { execute, isLoading } = useAction(stripeRedirect, {
+    onSuccess: (data) => {
+      window.location.href = data;
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
+  const onClick = () => {
+    execute({});
+  };
 
   return (
     <Dialog open={proModal.isOpen} onOpenChange={proModal.onClose}>
@@ -19,16 +35,18 @@ const ProModal = () => {
           <h2 className="text-xl font-semibold">
             Uprade to Taskify Pro Today!
           </h2>
-          <p className="text-xs font-semibold text-neutral-600">Explore the best of Taskify</p>
+          <p className="text-xs font-semibold text-neutral-600">
+            Explore the best of Taskify
+          </p>
           <div className="pl-3">
-            <ol className="text-sm list-disc">
+            <ol className="list-disc text-sm">
               <li>Unlimited boards</li>
               <li>Advanced checklists</li>
               <li>Admin and security features</li>
               <li>And more!</li>
             </ol>
           </div>
-          <Button className="w-full" variant="primary">
+          <Button disabled={isLoading} onClick={onClick} className="w-full" variant="primary">
             Upgrade
           </Button>
         </div>
