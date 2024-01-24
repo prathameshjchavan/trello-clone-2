@@ -2,15 +2,14 @@
 
 import { auth, currentUser } from "@clerk/nextjs";
 import { revalidatePath } from "next/cache";
-import { ACTION, ENTITY_TYPE } from "@prisma/client";
 
 import { InputType, ReturnType } from "./types";
 import { db } from "@/lib/db";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { StripeRedirect } from "./schema";
-import createAuditLog from "@/lib/create-audit-log";
 import { absoluteUrl } from "@/lib/utils";
 import { stripe } from "@/lib/stripe";
+import Stripe from "stripe";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -32,14 +31,15 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         orgId,
       },
     });
+    let stripeSession: Stripe.BillingPortal.Session | Stripe.Checkout.Session;
 
     if (orgSubscription && orgSubscription.stripeCustomerId) {
-      const stripeSession = await stripe.billingPortal.sessions.create({
+      stripeSession = await stripe.billingPortal.sessions.create({
         customer: orgSubscription.stripeCustomerId,
         return_url: settingsUrl,
       });
     } else {
-      const stripeSession = await stripe.checkout.sessions.create({
+      stripeSession = await stripe.checkout.sessions.create({
         success_url: settingsUrl,
         cancel_url: settingsUrl,
         payment_method_types: ["card"],
@@ -66,9 +66,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
           orgId: `${orgId}`,
         }
       });
-
-      url = stripeSession.url || "";
     }
+
+    url = stripeSession.url || "";
   } catch (error) {
     return {
       error: "Something went wrong!",
