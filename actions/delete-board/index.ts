@@ -11,6 +11,7 @@ import { createSafeAction } from "@/lib/create-safe-action";
 import { DeleteBoard } from "./schema";
 import createAuditLog from "@/lib/create-audit-log";
 import { decrementAvailableCount } from "@/lib/org-limit";
+import { checkSubscription } from "@/lib/subscription";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -21,6 +22,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
+  const isPro = await checkSubscription();
   const { id } = data;
   let board;
 
@@ -32,7 +34,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       },
     });
 
-    await decrementAvailableCount()
+    if (!isPro) await decrementAvailableCount();
 
     await createAuditLog({
       entityTitle: board.title,
