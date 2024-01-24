@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 import {
   Tooltip,
   TooltipContent,
@@ -6,7 +8,7 @@ import {
 } from "./ui/tooltip";
 
 interface HintProps {
-  children: React.ReactNode;
+  children: ReactNode;
   description: string;
   side?: "left" | "right" | "top" | "bottom";
   sideOffset?: number;

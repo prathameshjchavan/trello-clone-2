@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import { ElementRef, useRef } from "react";
+import { ElementRef, ReactNode, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -20,7 +20,7 @@ import FormPicker from "./form-picker";
 import { useProModal } from "@/hooks/use-pro-modal";
 
 interface FormPopoverProps {
-  children: React.ReactNode;
+  children: ReactNode;
   side?: "left" | "right" | "top" | "bottom";
   align?: "start" | "center" | "end";
   sideOffset?: number;

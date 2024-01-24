@@ -5,9 +5,7 @@ import { db } from "@/lib/db";
 import ActivityItem from "@/components/activity-item";
 import { Skeleton } from "@/components/ui/skeleton";
 
-type Props = {};
-
-const ActivityList = async (props: Props) => {
+const ActivityList = async () => {
   const { orgId } = auth();
 
   if (!orgId) redirect("/select-org");

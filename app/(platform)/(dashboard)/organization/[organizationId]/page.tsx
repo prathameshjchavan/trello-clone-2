@@ -5,13 +5,7 @@ import Info from "./_components/info";
 import BoardList from "./_components/board-list";
 import { checkSubscription } from "@/lib/subscription";
 
-interface OrganizationIdPageProps {
-  params: {
-    organizationId: string;
-  };
-}
-
-const OrganizationIdPage = async ({ params }: OrganizationIdPageProps) => {
+const OrganizationIdPage = async () => {
   const isPro = await checkSubscription();
 
   return (

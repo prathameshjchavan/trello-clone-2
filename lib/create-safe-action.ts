@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export type FieldErrors<T> = {
+  // eslint-disable-next-line
   [K in keyof T]?: string[];
 };
 
@@ -12,6 +13,7 @@ export type ActionState<TInput, TOutput> = {
 
 export const createSafeAction = <TInput, TOutput>(
   schema: z.Schema<TInput>,
+  // eslint-disable-next-line
   handler: (validatedData: TInput) => Promise<ActionState<TInput, TOutput>>,
 ) => {
   return async (data: TInput): Promise<ActionState<TInput, TOutput>> => {

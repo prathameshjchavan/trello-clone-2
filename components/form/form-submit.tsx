@@ -1,11 +1,13 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
+import { ReactNode } from "react";
+
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 interface FormSubmitProps {
-  children: React.ReactNode;
+  children: ReactNode;
   disabled?: boolean;
   className?: string;
   variant?:

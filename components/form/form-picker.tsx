@@ -23,30 +23,30 @@ const FormPicker = ({ id, errors }: FormPickerProps) => {
   const { pending } = useFormStatus();
 
   // fetch images from unsplash
-  // useEffect(() => {
-  //   const fetchImages = async () => {
-  //     try {
-  //       const result = await unspalsh.photos.getRandom({
-  //         collectionIds: ["317099"],
-  //         count: 9,
-  //       });
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const result = await unspalsh.photos.getRandom({
+          collectionIds: ["317099"],
+          count: 9,
+        });
 
-  //       if (result?.response) {
-  //         const newImages = result.response as Array<Record<string, any>>;
-  //         setImages(newImages);
-  //       } else {
-  //         console.error("Failed to get images from Unsplash");
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //       setImages([]);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
+        if (result?.response) {
+          const newImages = result.response as Array<Record<string, any>>;
+          setImages(newImages);
+        } else {
+          console.error("Failed to get images from Unsplash");
+        }
+      } catch (error) {
+        console.log(error);
+        setImages([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  //   fetchImages();
-  // }, []);
+    fetchImages();
+  }, []);
 
   if (isLoading)
     return (

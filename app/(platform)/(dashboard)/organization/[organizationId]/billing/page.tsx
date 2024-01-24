@@ -3,9 +3,7 @@ import Info from "../_components/info"
 import { Separator } from "@/components/ui/separator"
 import SubscriptionButton from "./_components/subscription-button"
 
-type Props = {}
-
-const BillingPage = async (props: Props) => {
+const BillingPage = async () => {
     const isPro = await checkSubscription()
 
   return (

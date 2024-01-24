@@ -1,5 +1,3 @@
-import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
 import { Board } from "@prisma/client";
 import BoardTitleForm from "./board-title-form";
 import BoardOptions from "./board-options";
@@ -9,8 +7,6 @@ interface BoardNavbarProps {
 }
 
 const BoardNavbar = async ({ data }: BoardNavbarProps) => {
-  const { orgId } = auth();
-
   return (
     <div className="fixed top-14 z-[40] flex h-14 w-full items-center justify-between space-x-4 bg-black/50 px-6 text-white">
       <BoardTitleForm data={data} />

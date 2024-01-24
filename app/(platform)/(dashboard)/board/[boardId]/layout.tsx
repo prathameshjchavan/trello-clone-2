@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { notFound, redirect } from "next/navigation";

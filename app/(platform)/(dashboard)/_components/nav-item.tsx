@@ -24,6 +24,7 @@ interface NavItemProps {
   isActive: boolean;
   isExpanded: boolean;
   organization: Organization;
+  // eslint-disable-next-line
   onExpand: (id: string) => void;
 }
 
